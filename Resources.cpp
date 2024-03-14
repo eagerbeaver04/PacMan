@@ -1,7 +1,5 @@
 #include "Resources.h"
 
-#include "Resources.h"
-
 
 std::map<int, sf::Sprite*> Resources::sprites;
 
@@ -9,7 +7,7 @@ sf::Texture Resources::Textures;
 sf::Texture Resources::Labyrinth;
 
 sf::Sprite* Resources::LabyrinthPieces[32];
-
+std::vector<Resources::EntitySprite> Resources::vec_sprites;
 const int Resources::PacMan = 0;
 const int Resources::PacManDown = 1;
 const int Resources::PacManLeft = 2;
@@ -49,6 +47,20 @@ void Resources::load()
     }
 
     Textures.loadFromFile("textures/things.png");
+    std::array<Direction, 4> dir = {Direction::Up, Direction::Down, Direction::Left, Direction::Right};
+    int entity_number = 5;
+    for(int rect1 =0; rect1 < 4; ++rect1)
+    {
+        vec_sprites.reserve(entity_number);
+        for (int rect2 = 0; rect2 < entity_number; ++rect2)
+        {
+            auto sprite = std::make_unique<sf::Sprite>(
+                    sf::Sprite(Textures, sf::IntRect(rect1*45, rect2*15, 15, 15)));
+            sprite->setScale(2.0f, 2.0f);
+            sprite->setOrigin(7.5f, 7.5f);
+            vec_sprites[rect1].sprites.insert({dir[rect1], std::move(sprite)});
+        }
+    }
 
     loadSprite(Resources::PacMan, 0, 0);
     loadSprite(Resources::PacManDown, 45, 0);
@@ -90,6 +102,7 @@ sf::Sprite* Resources::get(int value, Direction facing)
                 value += 3;
                 break;
         }
+        return vec_sprites[value/4].sprites.at(facing).get();//(?)
     }
 
     return sprites.at(value);

@@ -2,6 +2,8 @@
 #include "SFML/Graphics.hpp"
 #include "Directions.h"
 #include <map>
+#include <array>
+#include <memory>
 
 class Resources
 {
@@ -9,10 +11,15 @@ private:
     static sf::Texture Textures;
     static sf::Texture Labyrinth;
 
-    static map<int, sf::Sprite*> sprites;
+    static std::map<int, sf::Sprite*> sprites;
 
     static void loadSprite(int value, int rect1, int rect2);
 
+    struct EntitySprite
+    {
+        std::map<Direction, std::unique_ptr<sf::Sprite>> sprites;
+    };
+    static std::vector<EntitySprite> vec_sprites;
     static const int PacManDown;
     static const int PacManLeft;
     static const int PacManRight;

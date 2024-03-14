@@ -8,12 +8,22 @@ add_executable(PacManGame main.cpp
         Labyrinth.cpp
         Directions.h
         Resources.cpp
-        Resources.h)
+        Resources.h
+        Entity.cpp
+        Entity.h
+        IMovable.cpp
+        IMovable.h
+        IVisible.cpp
+        IVisible.h
+        Ghost.cpp
+        Ghost.h
+        PacMan.cpp
+        PacMan.h)
 set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR "C:\\programming\\cpp\\lib\\sfml\\SFML-2.6.1\\lib\\cmake\\SFML")
 find_package(SFML COMPONENTS system window graphics audio network REQUIRED)
 include_directories(C:\\programming\\cpp\\lib\\sfml\\SFML-2.6.1\\include\\SFML)
-include_directories(plugins, labyrinth)
+include_directories(textures, labyrinth)
 if(SFML_FOUND)
     message(STATUS "SFML found")
     target_link_libraries(PacManGame sfml-system sfml-window sfml-graphics sfml-audio)
