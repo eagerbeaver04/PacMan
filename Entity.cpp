@@ -2,10 +2,8 @@
 
 void Entity::teleportTunnels()
 {
-    if (screenX == 0 && screenY == 17) {
+    if (tileX == 0 && tileY == 17)
         teleport(26, 17);
-        return;
-    }
-    else if (screenX == 27 && screenY == 17)
+    else if (tileX == 27 && tileY == 17)
         teleport(1, 17);
 }

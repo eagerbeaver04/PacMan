@@ -18,7 +18,14 @@ add_executable(PacManGame main.cpp
         Ghost.cpp
         Ghost.h
         PacMan.cpp
-        PacMan.h)
+        PacMan.h
+        Scene.cpp
+        Scene.h
+        Engine.cpp
+        Engine.h)
+
+file(COPY textures DESTINATION ${CMAKE_BINARY_DIR})
+file(COPY labyrinth DESTINATION ${CMAKE_BINARY_DIR})
 set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR "C:\\programming\\cpp\\lib\\sfml\\SFML-2.6.1\\lib\\cmake\\SFML")
 find_package(SFML COMPONENTS system window graphics audio network REQUIRED)

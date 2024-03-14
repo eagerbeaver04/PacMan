@@ -49,16 +49,16 @@ void Resources::load()
     Textures.loadFromFile("textures/things.png");
     std::array<Direction, 4> dir = {Direction::Up, Direction::Down, Direction::Left, Direction::Right};
     int entity_number = 5;
+    vec_sprites.resize(5);
     for(int rect1 =0; rect1 < 4; ++rect1)
     {
-        vec_sprites.reserve(entity_number);
         for (int rect2 = 0; rect2 < entity_number; ++rect2)
         {
             auto sprite = std::make_unique<sf::Sprite>(
                     sf::Sprite(Textures, sf::IntRect(rect1*45, rect2*15, 15, 15)));
             sprite->setScale(2.0f, 2.0f);
             sprite->setOrigin(7.5f, 7.5f);
-            vec_sprites[rect1].sprites.insert({dir[rect1], std::move(sprite)});
+            vec_sprites[rect1][dir[rect1]] = std::move(sprite);
         }
     }
 
@@ -101,8 +101,12 @@ sf::Sprite* Resources::get(int value, Direction facing)
             case Direction::Right:
                 value += 3;
                 break;
+//            case Direction::Unset:
+//                facing = Direction::Up;
+//                break;
         }
-        return vec_sprites[value/4].sprites.at(facing).get();//(?)
+
+            //return vec_sprites[value / 4].at(facing).get();//(?)
     }
 
     return sprites.at(value);

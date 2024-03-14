@@ -46,8 +46,6 @@ void Ghost::movement()
         case Direction::Right:
             move(speed, 0);
             break;
-        case Direction::Unset:
-            break;
     }
 }
 
@@ -105,16 +103,16 @@ bool Ghost::canMove(Labyrinth& labyrinth)
     switch (this->getDirection())
     {
         case Direction::Up:
-            return !labyrinth.tileEntity(tileX, tileY - 1);
+            return !labyrinth.tileEntity(this->getTileX(), this->getTileY() - 1);
             break;
         case Direction::Down:
-            return !labyrinth.tileEntity(tileX, tileY + 1);
+            return !labyrinth.tileEntity(this->getTileX(), this->getTileY() + 1);
             break;
         case Direction::Left:
-            return !labyrinth.tileEntity(tileX - 1, tileY);
+            return !labyrinth.tileEntity(this->getTileX() - 1, this->getTileY());
             break;
         case Direction::Right:
-            return !labyrinth.tileEntity(tileX + 1, tileY);
+            return !labyrinth.tileEntity(this->getTileX() + 1, this->getTileY());
             break;
         default:
             return false;
@@ -132,15 +130,15 @@ void Ghost::getSprite(int i)
 float Ghost::calculateDistance(Labyrinth& labyrinth, int addX, int addY) const
 {
     float distance = 1000000.0f;
-    if (!labyrinth.tileEntity(targetX + addX, targetY + addY))
-        distance = (float)sqrt(pow((targetX - (targetX + addX)), 2) + pow((targetY - (targetY+ addY)), 2));
+    if (!labyrinth.tileEntity(this->getTileX() + addX, this->getTileY() + addY))
+        distance = (float)sqrt(pow((targetX - (this->getTileX() + addX)), 2) + pow((targetY- (this->getTileY() + addY)), 2));
     return distance;
 }
 
 void Ghost::draw(sf::RenderWindow* window, Labyrinth& labyrinth)
 {
-    this->getSprite();
-    sprite->setPosition(screenX, screenY);
+    this->getSprite(0);
+    sprite->setPosition(this->getScreenX(), this->getScreenY());
     window->draw(*sprite);
 }
 
@@ -148,11 +146,11 @@ bool Ghost::render(int& delay,const std::vector<Entity*>& entities, sf::RenderWi
 {
     if (this->isScattering())
     {
-        if (tileX == targetX && tileY == targetY)
+        if (this->getTileX() == targetX && this->getTileY() == targetY)
             this->setScattering(false);
     }
 
-    if (labyrinth.isIntersection(tileX, tileY))
+    if (labyrinth.isIntersection(this->getTileX(), this->getTileY()))
     {
         if (this->isDecision())
         {
