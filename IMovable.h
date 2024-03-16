@@ -13,8 +13,6 @@ protected:
     int tileX;
     int tileY;
 public:
-    [[nodiscard]] float getScreenX() const { return screenX; }
-    [[nodiscard]] float getScreenY() const { return screenY; }
     [[nodiscard]] int getTileX() const { return tileX; }
     [[nodiscard]] int getTileY() const { return tileY; }
 
@@ -30,7 +28,6 @@ public:
     virtual void set_target(int x, int y) = 0;
     virtual bool isFrightened() = 0;
     virtual bool isScattering() = 0;
-    virtual void setScattering(bool s)= 0;
     virtual bool render(int& delay,const std::vector<Entity*>& entities, sf::RenderWindow* window, Labyrinth& labyrinth) = 0;
     virtual void teleportTunnels() = 0;
 };

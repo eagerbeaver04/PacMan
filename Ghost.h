@@ -11,29 +11,22 @@ private:
     int frightened;
     bool outHome;
     bool decision;
-public:
-    Ghost(int tilePosX, int tilePosY, int destinationX, int destinationY, float speed);
-
+    bool isDecision() const;
+    void setDecision(bool d);
+    void setScattering(bool s) ;
+    float calculateDistance(Labyrinth& labyrinth, int addX, int addY) const;
+protected:
     void set_target(int x, int y) override;
-    void setDirection(Direction dir);
-    Direction getDirection();
-
     void movement() override;
     void teleport(int x, int y) override;
     void key(int code) override {};
     bool canMove(Labyrinth& labyrinth) override;
     void getSprite(int i) override;
-    bool render(int& delay,const std::vector<Entity*>& entities, sf::RenderWindow* window, Labyrinth& labyrinth) override;
     bool isOutHome() override;
-
-    bool isDecision() const;
-    void setDecision(bool d);
-
     bool isScattering() override;
-    void setScattering(bool s) override;
-
     void setFrightened(bool f) override;
     bool isFrightened() override;
-
-    float calculateDistance(Labyrinth& labyrinth, int addX, int addY) const;
+public:
+    Ghost(int tilePosX, int tilePosY, int destinationX, int destinationY, float speed);
+    bool render(int& delay,const std::vector<Entity*>& entities, sf::RenderWindow* window, Labyrinth& labyrinth) override;
 };

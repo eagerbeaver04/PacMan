@@ -20,11 +20,6 @@ void Ghost::set_target(int x, int y)
     targetY = y;
 }
 
-void Ghost::setDirection(Direction dir)
-{
-    moving = dir;
-}
-
 void Ghost::movement()
 {
     switch (moving)
