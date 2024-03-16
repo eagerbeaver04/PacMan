@@ -101,15 +101,16 @@ sf::Sprite* Resources::get(int value, Direction facing)
             case Direction::Right:
                 value += 3;
                 break;
-//            case Direction::Unset:
-//                facing = Direction::Up;
-//                break;
+            case Direction::Unset:
+                facing = Direction::Up;
+                break;
         }
 
             //return vec_sprites[value / 4].at(facing).get();//(?)
     }
 
     return sprites.at(value);
+
 }
 
 

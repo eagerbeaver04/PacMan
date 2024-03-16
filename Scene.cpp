@@ -3,8 +3,7 @@ std::string filename = "labyrinth/Labirinth.txt";
 
 void Scene::init()
 {
-    entities.clear();
-    labyrinth = new Labyrinth(filename);
+    labyrinth =Labyrinth(filename);
 
     Entity* pacman = new PacMan();
 
@@ -28,14 +27,14 @@ void Scene::init()
 
 void Scene::draw(sf::RenderWindow* window)
 {
-    for (Entity* entity : entities)
-        entity->draw(window, *labyrinth);
+    for (auto&& entity : entities)
+        entity->draw(window, labyrinth);
 }
 
 void Scene::loop(sf::RenderWindow* window)
 {
-    for (Entity* entity : entities)
-        if (!entity->render(delay, entities, window, *labyrinth))
+    for (auto&& entity : entities)
+        if (!entity->render(delay, entities, window, labyrinth))
             Scene::init();
 }
 
@@ -45,8 +44,8 @@ void Scene::create(sf::RenderWindow* window)
     {
         for (int j = 0; j < Labyrinth::getSizeY(); j++)
         {
-            Resources::LabyrinthPieces[labyrinth->getValue(i, j)]->setPosition(i * 16.0f, j * 16.0f);
-            window->draw(*Resources::LabyrinthPieces[labyrinth->getValue(i, j)]);
+            Resources::LabyrinthPieces[labyrinth.getValue(i, j)]->setPosition(i * 16.0f, j * 16.0f);
+            window->draw(*Resources::LabyrinthPieces[labyrinth.getValue(i, j)]);
         }
     }
 
@@ -55,7 +54,7 @@ void Scene::create(sf::RenderWindow* window)
 
 void Scene::key(int code)
 {
-    for (Entity* entity : entities)
+    for (auto&& entity : entities)
         entity->key(code);
 }
 

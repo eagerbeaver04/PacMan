@@ -12,7 +12,7 @@
 class Scene
 {
 private:
-    Labyrinth* labyrinth;
+    Labyrinth labyrinth;
     std::vector<Entity*> entities;
     int delay;
     void draw(sf::RenderWindow* window);
