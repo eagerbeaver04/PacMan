@@ -9,6 +9,7 @@ protected:
     virtual void getSprite(int i) = 0;
     explicit IVisible(sf::Sprite* sprite_ = nullptr) : sprite(sprite_) {}
     virtual void draw(sf::RenderWindow* window, Labyrinth& labyrinth) = 0;
+    virtual ~IVisible() = default;
 };
 
 

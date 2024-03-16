@@ -29,4 +29,5 @@ public:
     virtual void set_target(int x, int y) = 0;
     virtual bool isFrightened() = 0;
     virtual void key(int code) = 0;
+    virtual ~IMovable() = default;
 };

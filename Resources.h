@@ -37,7 +37,7 @@ public:
     static void load();
     static sf::Sprite* get(int value, Direction facing);
 
-    static sf::Sprite* LabyrinthPieces[];
+    static std::array<std::unique_ptr<sf::Sprite>, 32> LabyrinthPieces;
 
     static const int PacMan;
     static const int Blinky;

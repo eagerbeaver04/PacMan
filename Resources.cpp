@@ -6,7 +6,7 @@ std::map<int, sf::Sprite*> Resources::sprites;
 sf::Texture Resources::Textures;
 sf::Texture Resources::Labyrinth;
 
-sf::Sprite* Resources::LabyrinthPieces[32];
+std::array<std::unique_ptr<sf::Sprite>,32> Resources::LabyrinthPieces;
 std::vector<Resources::EntitySprite> Resources::vec_sprites;
 const int Resources::PacMan = 0;
 const int Resources::PacManDown = 1;
@@ -40,7 +40,7 @@ void Resources::load()
     {
         for (int j = 0; j < 4; j++)
         {
-            LabyrinthPieces[index] = new sf::Sprite(Labyrinth, sf::IntRect(i * 8, j * 8, 8, 8));
+            LabyrinthPieces[index] = std::make_unique<sf::Sprite>(Labyrinth, sf::IntRect(i * 8, j * 8, 8, 8));
             LabyrinthPieces[index]->setScale(2.0f, 2.0f);
             index++;
         }
