@@ -220,7 +220,6 @@ bool PacMan::render(int& delay,const std::vector<Entity*>& entities, sf::RenderW
 
             if (tileX == ghost->getTileX() && tileY == ghost->getTileY())
             {
-
                 if (ghost->isFrightened())
                 {
                     ghost->teleport(13, 14);
