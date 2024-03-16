@@ -130,7 +130,7 @@ void PacMan::getSprite(int i)
 }
 
 
-bool PacMan::render(int& delay,const std::vector<Entity*>& entities, sf::RenderWindow* window, Labyrinth& labyrinth)
+bool PacMan::render(int& delay,const std::vector<std::unique_ptr<Entity>>& entities, sf::RenderWindow* window, Labyrinth& labyrinth)
 {
     teleportTunnels();
 
@@ -150,17 +150,17 @@ bool PacMan::render(int& delay,const std::vector<Entity*>& entities, sf::RenderW
     {
         labyrinth.setValue(tileX, tileY, 30);
         {
-            for (Entity* entity : entities)
-                if (entity != this)
+            for (auto&& entity : entities)
+                if (entity.get() != this)
                     entity->setFrightened(true);
         }
     }
 
     if (eatenDots == 240)
     {
-        for (Entity* ghost : entities)
+        for (auto&& ghost : entities)
         {
-            if (ghost != this)
+            if (ghost.get() != this)
                 ghost->teleport(-2, -2);
         }
         delay++;
@@ -172,9 +172,9 @@ bool PacMan::render(int& delay,const std::vector<Entity*>& entities, sf::RenderW
     {
         if (dead)
         {
-            for (Entity* ghost : entities)
+            for (auto&& ghost : entities)
             {
-                if (ghost != this)
+                if (ghost.get() != this)
                 {
                     if(ghost->isOutHome())
                         ghost->teleport(13, 14);
@@ -189,9 +189,9 @@ bool PacMan::render(int& delay,const std::vector<Entity*>& entities, sf::RenderW
 
     if (this->eatenDots == 5)
     {
-        for (Entity* ghost : entities)
+        for (auto&& ghost : entities)
         {
-            if (ghost != this && !ghost->isOutHome())
+            if (ghost.get() != this && !ghost->isOutHome())
             {
                 ghost->teleport(13, 14);
                 break;
@@ -201,9 +201,9 @@ bool PacMan::render(int& delay,const std::vector<Entity*>& entities, sf::RenderW
 
     if (this->eatenDots == 50)
     {
-        for (Entity* ghost : entities)
+        for (auto&& ghost : entities)
         {
-            if (ghost != this && !(ghost->isOutHome()))
+            if (ghost.get() != this && !(ghost->isOutHome()))
             {
                 ghost->teleport(13, 14);
                 break;
@@ -211,9 +211,9 @@ bool PacMan::render(int& delay,const std::vector<Entity*>& entities, sf::RenderW
         }
     }
 
-    for (Entity* ghost : entities)
+    for (auto&& ghost : entities)
     {
-        if (ghost != this)
+        if (ghost.get() != this)
         {
             if (!ghost->isScattering())
                 ghost->set_target(tileX, tileY);
@@ -229,7 +229,7 @@ bool PacMan::render(int& delay,const std::vector<Entity*>& entities, sf::RenderW
                 {
                     dead = true;
                     directions = {};
-                    for(Entity* ghost1 : entities)
+                    for(auto&& ghost1 : entities)
                         ghost1->teleport(-2, -2);
                 }
             }

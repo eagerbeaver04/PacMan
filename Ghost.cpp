@@ -107,7 +107,7 @@ float Ghost::calculateDistance(Labyrinth& labyrinth, int addX, int addY) const
     return distance;
 }
 
-bool Ghost::render(int& delay,const std::vector<Entity*>& entities, sf::RenderWindow* window, Labyrinth& labyrinth)
+bool Ghost::render(int& delay,const std::vector<std::unique_ptr<Entity>>& entities, sf::RenderWindow* window, Labyrinth& labyrinth)
 {
     if (isScattering())
     {

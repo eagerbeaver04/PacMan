@@ -26,5 +26,5 @@ protected:
     void set_target(int x, int y) override {};
 public:
     PacMan();
-    bool render(int& delay, const std::vector<Entity*>& entities, sf::RenderWindow* window, Labyrinth& labyrinth) override;
+    bool render(int& delay, const std::vector<std::unique_ptr<Entity>>& entities, sf::RenderWindow* window, Labyrinth& labyrinth) override;
 };

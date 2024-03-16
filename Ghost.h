@@ -25,5 +25,5 @@ protected:
     bool isFrightened() override;
 public:
     Ghost(int tilePosX, int tilePosY, int destinationX, int destinationY, float speed);
-    bool render(int& delay,const std::vector<Entity*>& entities, sf::RenderWindow* window, Labyrinth& labyrinth) override;
+    bool render(int& delay,const std::vector<std::unique_ptr<Entity>>& entities, sf::RenderWindow* window, Labyrinth& labyrinth) override;
 };

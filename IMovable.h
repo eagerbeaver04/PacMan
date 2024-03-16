@@ -22,7 +22,7 @@ public:
     [[nodiscard]] int getTileX() const { return tileX; }
     [[nodiscard]] int getTileY() const { return tileY; }
     virtual bool isScattering() = 0;
-    virtual bool render(int& delay,const std::vector<Entity*>& entities, sf::RenderWindow* window, Labyrinth& labyrinth) = 0;
+    virtual bool render(int& delay,const std::vector<std::unique_ptr<Entity>>& entities, sf::RenderWindow* window, Labyrinth& labyrinth) = 0;
     virtual void teleport(int x, int y) = 0;
     virtual bool isOutHome() = 0;
     virtual void setFrightened(bool f) =0;
