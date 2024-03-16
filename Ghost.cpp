@@ -44,24 +44,10 @@ bool Ghost::isScattering()
     return scattering;
 }
 
-void Ghost::setScattering(bool s)
-{
-    scattering = s;
-}
 
 bool Ghost::isOutHome()
 {
     return outHome;
-}
-
-bool Ghost::isDecision() const
-{
-    return decision;
-}
-
-void Ghost::setDecision(bool d)
-{
-    decision = d;
 }
 
 void Ghost::teleport(int x, int y)
@@ -93,17 +79,13 @@ bool Ghost::canMove(Labyrinth& labyrinth)
     switch (moving)
     {
         case Direction::Up:
-            return !labyrinth.tileEntity(this->getTileX(), this->getTileY() - 1);
-            break;
+            return !labyrinth.tileEntity(tileX, tileY - 1);
         case Direction::Down:
-            return !labyrinth.tileEntity(this->getTileX(), this->getTileY() + 1);
-            break;
+            return !labyrinth.tileEntity(tileX, tileY + 1);
         case Direction::Left:
-            return !labyrinth.tileEntity(this->getTileX() - 1, this->getTileY());
-            break;
+            return !labyrinth.tileEntity(tileX - 1, tileY);
         case Direction::Right:
-            return !labyrinth.tileEntity(this->getTileX() + 1, this->getTileY());
-            break;
+            return !labyrinth.tileEntity(tileX + 1, tileY);
         default:
             return false;
     }
@@ -111,7 +93,7 @@ bool Ghost::canMove(Labyrinth& labyrinth)
 
 void Ghost::getSprite(int i)
 {
-    if (!this->isFrightened())
+    if (!isFrightened())
         sprite = Resources::get(Resources::Pinky, moving);
     else
         sprite = Resources::get(Resources::FrightenedGhost, moving);
@@ -120,22 +102,22 @@ void Ghost::getSprite(int i)
 float Ghost::calculateDistance(Labyrinth& labyrinth, int addX, int addY) const
 {
     float distance = 1000000.0f;
-    if (!labyrinth.tileEntity(this->getTileX() + addX, this->getTileY() + addY))
-        distance = (float)sqrt(pow((targetX - (this->getTileX() + addX)), 2) + pow((targetY- (this->getTileY() + addY)), 2));
+    if (!labyrinth.tileEntity(tileX + addX, tileY + addY))
+        distance = static_cast<float>(sqrt(pow((targetX - (tileX + addX)), 2) + pow((targetY- (tileY + addY)), 2)));
     return distance;
 }
 
 bool Ghost::render(int& delay,const std::vector<Entity*>& entities, sf::RenderWindow* window, Labyrinth& labyrinth)
 {
-    if (this->isScattering())
+    if (isScattering())
     {
-        if (this->getTileX() == targetX && this->getTileY() == targetY)
-            this->setScattering(false);
+        if (tileX == targetX && tileY == targetY)
+            scattering = false;
     }
 
-    if (labyrinth.isIntersection(this->getTileX(), this->getTileY()))
+    if (labyrinth.isIntersection(tileX, tileY))
     {
-        if (this->isDecision())
+        if (decision)
         {
             float dRight = calculateDistance(labyrinth, 1, 0);
             float dLeft = calculateDistance(labyrinth, -1, 0);
@@ -151,15 +133,15 @@ bool Ghost::render(int& delay,const std::vector<Entity*>& entities, sf::RenderWi
             else if (dDown < dLeft && dDown < dUp && dDown < dRight)
                 moving = Direction::Down;
         }
-        this->setDecision(false);
+        decision = false;
     }
     else
-        this->setDecision(true);
+        decision = true;
 
-    if (this->canMove(labyrinth) && this->isOutHome())
-        this->movement();
+    if (canMove(labyrinth) && outHome)
+        movement();
     else
-        this->setDecision(true);
+        decision = true;
 
     return true;
 }

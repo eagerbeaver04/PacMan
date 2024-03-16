@@ -11,9 +11,6 @@ private:
     int frightened;
     bool outHome;
     bool decision;
-    bool isDecision() const;
-    void setDecision(bool d);
-    void setScattering(bool s) ;
     float calculateDistance(Labyrinth& labyrinth, int addX, int addY) const;
 protected:
     void set_target(int x, int y) override;
