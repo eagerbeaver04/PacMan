@@ -3,12 +3,6 @@
 #include "PacMan.h"
 #include "Ghost.h"
 
-
-#include <cmath>
-#include <random>
-#include <cstdlib>
-
-
 class Scene
 {
 private:

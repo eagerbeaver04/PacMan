@@ -187,7 +187,7 @@ bool PacMan::render(int& delay,const std::vector<std::unique_ptr<Entity>>& entit
         else return false;
     }
 
-    if (this->eatenDots == 5)
+    if (eatenDots == 5)
     {
         for (auto&& ghost : entities)
         {
@@ -199,7 +199,7 @@ bool PacMan::render(int& delay,const std::vector<std::unique_ptr<Entity>>& entit
         }
     }
 
-    if (this->eatenDots == 50)
+    if (eatenDots == 50)
     {
         for (auto&& ghost : entities)
         {

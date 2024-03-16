@@ -20,8 +20,6 @@ void Scene::init()
     entities.push_back(std::move(inky));
     entities.push_back(std::move(clyde));
 
-    srand(time(NULL));
-
     delay = 0;
 }
 
@@ -49,7 +47,7 @@ void Scene::create(sf::RenderWindow* window)
         }
     }
 
-    this->draw(window);
+    draw(window);
 }
 
 void Scene::key(int code)
