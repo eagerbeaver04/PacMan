@@ -27,13 +27,10 @@ public:
     virtual bool canMove(Labyrinth& labyrinth) = 0;
     virtual void setFrightened(bool f) =0;
     virtual bool isOutHome() = 0;
-    virtual bool isFrightened()=0;
-    virtual void setDead(bool d) = 0;
-    virtual bool isDead() = 0;
     virtual void set_target(int x, int y) = 0;
+    virtual bool isFrightened() = 0;
     virtual bool isScattering() = 0;
     virtual void setScattering(bool s)= 0;
-    virtual int getDots() = 0;
     virtual bool render(int& delay,const std::vector<Entity*>& entities, sf::RenderWindow* window, Labyrinth& labyrinth) = 0;
     virtual void teleportTunnels() = 0;
 };

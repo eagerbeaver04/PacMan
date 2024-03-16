@@ -25,11 +25,6 @@ void Ghost::setDirection(Direction dir)
     moving = dir;
 }
 
-Direction Ghost::getDirection()
-{
-    return moving;
-}
-
 void Ghost::movement()
 {
     switch (moving)
@@ -100,7 +95,7 @@ bool Ghost::isFrightened()
 
 bool Ghost::canMove(Labyrinth& labyrinth)
 {
-    switch (this->getDirection())
+    switch (moving)
     {
         case Direction::Up:
             return !labyrinth.tileEntity(this->getTileX(), this->getTileY() - 1);
@@ -122,9 +117,9 @@ bool Ghost::canMove(Labyrinth& labyrinth)
 void Ghost::getSprite(int i)
 {
     if (!this->isFrightened())
-        sprite = Resources::get(Resources::Pinky, this->getDirection());
+        sprite = Resources::get(Resources::Pinky, moving);
     else
-        sprite = Resources::get(Resources::FrightenedGhost, this->getDirection());
+        sprite = Resources::get(Resources::FrightenedGhost, moving);
 }
 
 float Ghost::calculateDistance(Labyrinth& labyrinth, int addX, int addY) const
@@ -133,13 +128,6 @@ float Ghost::calculateDistance(Labyrinth& labyrinth, int addX, int addY) const
     if (!labyrinth.tileEntity(this->getTileX() + addX, this->getTileY() + addY))
         distance = (float)sqrt(pow((targetX - (this->getTileX() + addX)), 2) + pow((targetY- (this->getTileY() + addY)), 2));
     return distance;
-}
-
-void Ghost::draw(sf::RenderWindow* window, Labyrinth& labyrinth)
-{
-    this->getSprite(0);
-    sprite->setPosition(this->getScreenX(), this->getScreenY());
-    window->draw(*sprite);
 }
 
 bool Ghost::render(int& delay,const std::vector<Entity*>& entities, sf::RenderWindow* window, Labyrinth& labyrinth)
@@ -160,13 +148,13 @@ bool Ghost::render(int& delay,const std::vector<Entity*>& entities, sf::RenderWi
             float dDown = calculateDistance(labyrinth, 0, 1);
 
             if (dRight < dLeft && dRight < dUp && dRight < dDown)
-                this->setDirection(Direction::Right);
+                moving = Direction::Right;
             else if (dLeft < dRight && dLeft < dUp && dLeft < dDown)
-                this->setDirection(Direction::Left);
+                moving = Direction::Left;
             else if (dUp < dLeft && dUp < dRight && dUp < dDown)
-                this->setDirection(Direction::Up);
+                moving = Direction::Up;
             else if (dDown < dLeft && dDown < dUp && dDown < dRight)
-                this->setDirection(Direction::Down);
+                moving = Direction::Down;
         }
         this->setDecision(false);
     }

@@ -1,7 +1,5 @@
 
 #include "PacMan.h"
-using namespace  std;
-using namespace sf;
 
 PacMan::PacMan() : Entity(13 * 16.0f + 8.0f + 8.0f, 26 * 16.0f + 8.0f, 0.1f, 13, 26)
 {
@@ -36,18 +34,18 @@ void PacMan::key(int code)
 {
     switch (code)
     {
-        case Keyboard::Up:
-            this->queueDirection(Direction::Up);
-            break;
-        case Keyboard::Down:
-            this->queueDirection(Direction::Down);
-            break;
-        case Keyboard::Left:
-            this->queueDirection(Direction::Left);
-            break;
-        case Keyboard::Right:
-            this->queueDirection(Direction::Right);
-            break;
+        case sf::Keyboard::Up:
+            queueDirection(Direction::Up);
+            return;
+        case sf::Keyboard::Down:
+            queueDirection(Direction::Down);
+            return;
+        case sf::Keyboard::Left:
+            queueDirection(Direction::Left);
+            return;
+        case sf::Keyboard::Right:
+            queueDirection(Direction::Right);
+            return;
     }
 }
 
@@ -59,134 +57,98 @@ void PacMan::movement()
         {
             case Direction::Up:
                 move(0, -speed);
-                break;
+                return;
             case Direction::Down:
                 move(0, speed);
-                break;
+                return;
             case Direction::Left:
                 move(-speed, 0);
-                break;
+                return;
             case Direction::Right:
                 move(speed, 0);
-                break;
+                return;
         }
     }
 }
 
 bool PacMan::canMove(Labyrinth& labyrinth)
 {
-    if (!this->getDirections().empty())
+    if (!directions.empty())
     {
-        switch (this->getDirections().front())
+        switch (directions.front())
         {
             case Direction::Up:
-                return !labyrinth.tileEntity(this->getTileX(), this->getTileY() - 1);
-                break;
+                return !labyrinth.tileEntity(tileX, tileY - 1);
+
             case Direction::Down:
-                return !labyrinth.tileEntity(this->getTileX(), this->getTileY() + 1);
-                break;
+                return !labyrinth.tileEntity(tileX, tileY + 1);
+
             case Direction::Left:
-                return !labyrinth.tileEntity(this->getTileX() - 1, this->getTileY());
-                break;
+                return !labyrinth.tileEntity(tileX - 1, tileY);
+
             case Direction::Right:
-                return !labyrinth.tileEntity(this->getTileX() + 1, this->getTileY());
-                break;
+                return !labyrinth.tileEntity(tileX + 1, tileY);
+
         }
     }
     return true;
-}
-
-queue<Direction> PacMan::getDirections()
-{
-    return directions;
 }
 
 void PacMan::stop()
 {
     if (directions.size() > 1)
     {
-        if ((int)(screenX + 8) % 16 == 0 && (int)(screenY + 8) % 16 == 0)
+        if (static_cast<int>(screenX + 8) % 16 == 0 && static_cast<int>(screenY + 8) % 16 == 0)
         {
             switch (directions.front())
             {
                 case Direction::Up:
                     directions.pop();
-                    break;
+                    return;
                 case Direction::Down:
                     directions.pop();
-                    break;
+                    return;
                 case Direction::Left:
                     directions.pop();
-                    break;
+                    return;
                 case Direction::Right:
                     directions.pop();
-                    break;
+                    return;
             }
         }
     }
 }
 
-void PacMan::eatDot()
-{
-    eatenDots++;
-}
-
-int PacMan::getDots()
-{
-    return eatenDots;
-}
-
-void PacMan::setDead(bool d)
-{
-    dead = d;
-}
-
-bool PacMan::isDead()
-{
-    return dead;
-}
-
-bool PacMan::isFrightened()
-{
-    return false;
-}
-
 void PacMan::getSprite(int i)
 {
-    if (this->getDirections().empty())
+    if (directions.empty())
         sprite = Resources::get(Resources::PacMan, Direction::Unset);
     else
-        sprite = Resources::get(Resources::PacMan, this->getDirections().front());
-    if (this->isDead())
+        sprite = Resources::get(Resources::PacMan, directions.front());
+    if (dead)
         sprite = Resources::get(Resources::DeadPacMan, Direction::Unset);
 }
 
-void PacMan::draw(RenderWindow* window, Labyrinth& labyrinth)
+
+bool PacMan::render(int& delay,const std::vector<Entity*>& entities, sf::RenderWindow* window, Labyrinth& labyrinth)
 {
-    this->getSprite(0);
-    sprite->setPosition(this->getScreenX(), this->getScreenY());
-    window->draw(*sprite);
-}
+    teleportTunnels();
 
-bool PacMan::render(int& delay,const vector<Entity*>& entities, RenderWindow* window, Labyrinth& labyrinth)
-{
-    this->teleportTunnels();
+    if (canMove(labyrinth) && !dead)
+        movement();
 
-    if (canMove(labyrinth) && !this->isDead())
-        this->movement();
+    if (labyrinth.isIntersection(tileX, tileY))
+        stop();
 
-    if (labyrinth.isIntersection(this->getTileX(), this->getTileY()))
-        this->stop();
-
-    if (labyrinth.getValue(this->getTileX(), this->getTileY()) == 26)
+    if (labyrinth.getValue(tileX, tileY) == 26)
     {
-        labyrinth.setValue(this->getTileX(), this->getTileY(), 30);
-        this->eatDot();
+        labyrinth.setValue(tileX, tileY, 30);
+        eatenDots++;
     }
 
-    else if (labyrinth.getValue(this->getTileX(), this->getTileY()) == 27)
+    else if (labyrinth.getValue(tileX, tileY) == 27)
     {
-        labyrinth.setValue(this->getTileX(), this->getTileY(), 30);
+        labyrinth.setValue(tileX, tileY, 30);
         {
             for (Entity* entity : entities)
                 if (entity != this)
@@ -194,7 +156,7 @@ bool PacMan::render(int& delay,const vector<Entity*>& entities, RenderWindow* wi
         }
     }
 
-    if (this->getDots() == 240)
+    if (eatenDots == 240)
     {
         for (Entity* ghost : entities)
         {
@@ -203,12 +165,12 @@ bool PacMan::render(int& delay,const vector<Entity*>& entities, RenderWindow* wi
         }
         delay++;
     }
-    if (this->isDead())
+    if (dead)
         delay++;
 
     if (delay == 200)
     {
-        if (this->isDead())
+        if (dead)
         {
             for (Entity* ghost : entities)
             {
@@ -218,8 +180,8 @@ bool PacMan::render(int& delay,const vector<Entity*>& entities, RenderWindow* wi
                         ghost->teleport(13, 14);
                 }
             }
-            this->teleport(13, 26);
-            this->setDead(false);
+            teleport(13, 26);
+            dead = false;
             delay = 0;
         }
         else return false;
@@ -254,9 +216,9 @@ bool PacMan::render(int& delay,const vector<Entity*>& entities, RenderWindow* wi
         if (ghost != this)
         {
             if (!ghost->isScattering())
-                ghost->set_target(this->getTileX(), this->getTileY());
+                ghost->set_target(tileX, tileY);
 
-            if (this->getTileX() == ghost->getTileX() && this->getTileY() == ghost->getTileY())
+            if (tileX == ghost->getTileX() && tileY == ghost->getTileY())
             {
 
                 if (ghost->isFrightened())
@@ -266,7 +228,7 @@ bool PacMan::render(int& delay,const vector<Entity*>& entities, RenderWindow* wi
                 }
                 else
                 {
-                    this->setDead(true);
+                    dead = true;
                     directions = {};
                     for(Entity* ghost1 : entities)
                         ghost1->teleport(-2, -2);

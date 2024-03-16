@@ -22,11 +22,7 @@ public:
     void teleport(int x, int y) override;
     void key(int code) override {};
     bool canMove(Labyrinth& labyrinth) override;
-    void draw(sf::RenderWindow* window, Labyrinth& labyrinth) override;
     void getSprite(int i) override;
-    int getDots() override { return 0; };
-    void setDead(bool d) override {};
-    bool isDead() override { return false; };
     bool render(int& delay,const std::vector<Entity*>& entities, sf::RenderWindow* window, Labyrinth& labyrinth) override;
     bool isOutHome() override;
 
