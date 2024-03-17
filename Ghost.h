@@ -11,8 +11,8 @@ private:
     int frightened;
     bool outHome;
     bool decision;
-    float calculateDistance(Labyrinth& labyrinth, int addX, int addY) const;
 protected:
+    float calculateDistance(Labyrinth& labyrinth, int addX, int addY) const;
     void movement() override;
     void teleport(int x, int y) override;
     bool canMove(Labyrinth& labyrinth) override;

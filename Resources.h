@@ -4,6 +4,7 @@
 #include <map>
 #include <array>
 #include <memory>
+#include <iostream>
 
 class Resources
 {
@@ -17,21 +18,6 @@ private:
 
     using EntitySprite = std::map<Direction, std::unique_ptr<sf::Sprite>>;
     static std::vector<EntitySprite> vec_sprites;
-    static const int PacManDown;
-    static const int PacManLeft;
-    static const int PacManRight;
-    static const int BlinkyDown;
-    static const int BlinkyLeft;
-    static const int BlinkyRight;
-    static const int PinkyDown;
-    static const int PinkyLeft;
-    static const int PinkyRight;
-    static const int InkyDown;
-    static const int InkyLeft;
-    static const int InkyRight;
-    static const int ClydeDown;
-    static const int ClydeLeft;
-    static const int ClydeRight;
 
 public:
     static void load();
