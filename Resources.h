@@ -1,4 +1,5 @@
 #pragma once
+
 #include "SFML/Graphics.hpp"
 #include "Directions.h"
 #include <map>
@@ -6,13 +7,12 @@
 #include <memory>
 #include <iostream>
 
-class Resources
-{
+class Resources {
 private:
     static sf::Texture Textures;
     static sf::Texture Labyrinth;
 
-    static std::map<int, sf::Sprite*> sprites;
+    static std::map<int, sf::Sprite *> sprites;
 
     static void loadSprite(int value, int rect1, int rect2);
 
@@ -21,7 +21,8 @@ private:
 
 public:
     static void load();
-    static sf::Sprite* get(int value, Direction facing);
+
+    static sf::Sprite *get(int value, Direction facing);
 
     static std::array<std::unique_ptr<sf::Sprite>, 32> LabyrinthPieces;
 

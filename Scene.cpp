@@ -1,16 +1,16 @@
 #include "Scene.h"
+
 std::string filename = "labyrinth/Labirinth.txt";
 
-void Scene::init()
-{
-    labyrinth =Labyrinth(filename);
+void Scene::init() {
+    labyrinth = Labyrinth(filename);
 
     auto pacman = std::unique_ptr<Entity>(new PacMan());
 
-    auto blinky = std::unique_ptr<Entity>(new Ghost(13, 14, 3, 4, 0.020f*2));
-    auto pinky = std::unique_ptr<Entity>(new Ghost(13, 17, 23, 4, 0.017f*2));
-    auto inky = std::unique_ptr<Entity>(new Ghost(11, 17, 26, 32, 0.014f*2));
-    auto clyde = std::unique_ptr<Entity>(new Ghost(15, 17, 1, 32, 0.011f*2));
+    auto blinky = std::unique_ptr<Entity>(new Ghost(13, 14, 3, 4, 0.020f * 2, 0));
+    auto pinky = std::unique_ptr<Entity>(new Ghost(13, 17, 23, 4, 0.017f * 2, 1));
+    auto inky = std::unique_ptr<Entity>(new Ghost(11, 17, 26, 32, 0.014f * 2, 2));
+    auto clyde = std::unique_ptr<Entity>(new Ghost(15, 17, 1, 32, 0.011f * 2, 3));
 
     blinky->teleport(15, 14);
 
@@ -23,25 +23,20 @@ void Scene::init()
     delay = 0;
 }
 
-void Scene::draw(sf::RenderWindow* window)
-{
-    for (auto&& entity : entities)
+void Scene::draw(sf::RenderWindow *window) {
+    for (auto &&entity: entities)
         entity->draw(window, labyrinth);
 }
 
-void Scene::loop(sf::RenderWindow* window)
-{
-    for (auto&& entity : entities)
+void Scene::loop(sf::RenderWindow *window) {
+    for (auto &&entity: entities)
         if (!entity->render(delay, entities, window, labyrinth))
             Scene::init();
 }
 
-void Scene::create(sf::RenderWindow* window)
-{
-    for (int i = 0; i < Labyrinth::getSizeX(); i++)
-    {
-        for (int j = 0; j < Labyrinth::getSizeY(); j++)
-        {
+void Scene::create(sf::RenderWindow *window) {
+    for (int i = 0; i < Labyrinth::getSizeX(); i++) {
+        for (int j = 0; j < Labyrinth::getSizeY(); j++) {
             Resources::LabyrinthPieces[labyrinth.getValue(i, j)]->setPosition(i * 16.0f, j * 16.0f);
             window->draw(*Resources::LabyrinthPieces[labyrinth.getValue(i, j)]);
         }
@@ -50,9 +45,8 @@ void Scene::create(sf::RenderWindow* window)
     draw(window);
 }
 
-void Scene::key(int code)
-{
-    for (auto&& entity : entities)
+void Scene::key(int code) {
+    for (auto &&entity: entities)
         entity->key(code);
 }
 

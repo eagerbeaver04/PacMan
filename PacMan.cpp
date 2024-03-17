@@ -1,26 +1,21 @@
 
 #include "PacMan.h"
 
-PacMan::PacMan() : Entity(13 * 16.0f + 8.0f + 8.0f, 26 * 16.0f + 8.0f, 0.1f, 13, 26)
-{
+PacMan::PacMan() : Entity(13 * 16.0f + 8.0f + 8.0f, 26 * 16.0f + 8.0f, 0.1f, 13, 26) {
     dead = false;
     eatenDots = 0;
 }
 
-void PacMan::teleport(int x, int y)
-{
+void PacMan::teleport(int x, int y) {
     tileX = x;
     tileY = y;
     screenX = x * 16.0f + 8.0f;
     screenY = y * 16.0f + 8.0f;
 }
 
-void PacMan::queueDirection(Direction dir)
-{
-    if (!directions.empty())
-    {
-        if (static_cast<int>(dir) == -static_cast<int>(directions.front()))
-        {
+void PacMan::queueDirection(Direction dir) {
+    if (!directions.empty()) {
+        if (static_cast<int>(dir) == -static_cast<int>(directions.front())) {
             std::queue<Direction> clear;
             std::swap(directions, clear);
         }
@@ -30,10 +25,8 @@ void PacMan::queueDirection(Direction dir)
         directions.push(dir);
 }
 
-void PacMan::key(int code)
-{
-    switch (code)
-    {
+void PacMan::key(int code) {
+    switch (code) {
         case sf::Keyboard::Up:
             queueDirection(Direction::Up);
             return;
@@ -49,12 +42,9 @@ void PacMan::key(int code)
     }
 }
 
-void PacMan::movement()
-{
-    if (!directions.empty())
-    {
-        switch (directions.front())
-        {
+void PacMan::movement() {
+    if (!directions.empty()) {
+        switch (directions.front()) {
             case Direction::Up:
                 move(0, -speed);
                 return;
@@ -71,12 +61,9 @@ void PacMan::movement()
     }
 }
 
-bool PacMan::canMove(Labyrinth& labyrinth)
-{
-    if (!directions.empty())
-    {
-        switch (directions.front())
-        {
+bool PacMan::canMove(Labyrinth &labyrinth) {
+    if (!directions.empty()) {
+        switch (directions.front()) {
             case Direction::Up:
                 return !labyrinth.tileEntity(tileX, tileY - 1);
 
@@ -94,14 +81,10 @@ bool PacMan::canMove(Labyrinth& labyrinth)
     return true;
 }
 
-void PacMan::stop()
-{
-    if (directions.size() > 1)
-    {
-        if (static_cast<int>(screenX + 8) % 16 == 0 && static_cast<int>(screenY + 8) % 16 == 0)
-        {
-            switch (directions.front())
-            {
+void PacMan::stop() {
+    if (directions.size() > 1) {
+        if (static_cast<int>(screenX + 8) % 16 == 0 && static_cast<int>(screenY + 8) % 16 == 0) {
+            switch (directions.front()) {
                 case Direction::Up:
                     directions.pop();
                     return;
@@ -119,8 +102,7 @@ void PacMan::stop()
     }
 }
 
-void PacMan::getSprite(int i)
-{
+void PacMan::getSprite(int i) {
     if (directions.empty())
         sprite = Resources::get(Resources::PacMan, Direction::Unset);
     else
@@ -130,8 +112,8 @@ void PacMan::getSprite(int i)
 }
 
 
-bool PacMan::render(int& delay,const std::vector<std::unique_ptr<Entity>>& entities, sf::RenderWindow* window, Labyrinth& labyrinth)
-{
+bool PacMan::render(int &delay, const std::vector<std::unique_ptr<Entity>> &entities, sf::RenderWindow *window,
+                    Labyrinth &labyrinth) {
     teleportTunnels();
 
     if (canMove(labyrinth) && !dead)
@@ -140,26 +122,20 @@ bool PacMan::render(int& delay,const std::vector<std::unique_ptr<Entity>>& entit
     if (labyrinth.isIntersection(tileX, tileY))
         stop();
 
-    if (labyrinth.getValue(tileX, tileY) == 26)
-    {
+    if (labyrinth.getValue(tileX, tileY) == 26) {
         labyrinth.setValue(tileX, tileY, 30);
         eatenDots++;
-    }
-
-    else if (labyrinth.getValue(tileX, tileY) == 27)
-    {
+    } else if (labyrinth.getValue(tileX, tileY) == 27) {
         labyrinth.setValue(tileX, tileY, 30);
         {
-            for (auto&& entity : entities)
+            for (auto &&entity: entities)
                 if (entity.get() != this)
                     entity->setFrightened(true);
         }
     }
 
-    if (eatenDots == 240)
-    {
-        for (auto&& ghost : entities)
-        {
+    if (eatenDots == 240) {
+        for (auto &&ghost: entities) {
             if (ghost.get() != this)
                 ghost->teleport(-2, -2);
         }
@@ -168,68 +144,51 @@ bool PacMan::render(int& delay,const std::vector<std::unique_ptr<Entity>>& entit
     if (dead)
         delay++;
 
-    if (delay == 200)
-    {
-        if (dead)
-        {
-            for (auto&& ghost : entities)
-            {
-                if (ghost.get() != this)
-                {
-                    if(ghost->isOutHome())
+    if (delay == 200) {
+        if (dead) {
+            for (auto &&ghost: entities) {
+                if (ghost.get() != this) {
+                    if (ghost->isOutHome())
                         ghost->teleport(13, 14);
                 }
             }
             teleport(13, 26);
             dead = false;
             delay = 0;
-        }
-        else return false;
+        } else return false;
     }
 
-    if (eatenDots == 5)
-    {
-        for (auto&& ghost : entities)
-        {
-            if (ghost.get() != this && !ghost->isOutHome())
-            {
+    if (eatenDots == 5) {
+        for (auto &&ghost: entities) {
+            if (ghost.get() != this && !ghost->isOutHome()) {
                 ghost->teleport(13, 14);
                 break;
             }
         }
     }
 
-    if (eatenDots == 50)
-    {
-        for (auto&& ghost : entities)
-        {
-            if (ghost.get() != this && !(ghost->isOutHome()))
-            {
+    if (eatenDots == 50) {
+        for (auto &&ghost: entities) {
+            if (ghost.get() != this && !(ghost->isOutHome())) {
                 ghost->teleport(13, 14);
                 break;
             }
         }
     }
 
-    for (auto&& ghost : entities)
-    {
-        if (ghost.get() != this)
-        {
+    for (auto &&ghost: entities) {
+        if (ghost.get() != this) {
             if (!ghost->isScattering())
                 ghost->set_target(tileX, tileY);
 
-            if (tileX == ghost->getTileX() && tileY == ghost->getTileY())
-            {
-                if (ghost->isFrightened())
-                {
+            if (tileX == ghost->getTileX() && tileY == ghost->getTileY()) {
+                if (ghost->isFrightened()) {
                     ghost->teleport(13, 14);
                     ghost->setFrightened(false);
-                }
-                else
-                {
+                } else {
                     dead = true;
                     directions = {};
-                    for(auto&& ghost1 : entities)
+                    for (auto &&ghost1: entities)
                         ghost1->teleport(-2, -2);
                 }
             }

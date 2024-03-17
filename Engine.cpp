@@ -3,25 +3,20 @@
 sf::RenderWindow Engine::window;
 Scene Engine::game;
 
-void Engine::init()
-{
+void Engine::init() {
     Resources::load();
     window.create(sf::VideoMode(448, 596), "PacMan Game");
     game.init();
 }
 
-bool Engine::isOpen()
-{
+bool Engine::isOpen() {
     return window.isOpen();
 }
 
-void Engine::events()
-{
+void Engine::events() {
     sf::Event event;
-    while (window.pollEvent(event))
-    {
-        switch (event.type)
-        {
+    while (window.pollEvent(event)) {
+        switch (event.type) {
             case sf::Event::Closed:
                 window.close();
                 break;
@@ -33,9 +28,8 @@ void Engine::events()
     game.loop(&window);
 }
 
-void Engine::create()
-{
+void Engine::create() {
     window.clear(sf::Color::Black);
-    game.create(& window);
+    game.create(&window);
     window.display();
 }
