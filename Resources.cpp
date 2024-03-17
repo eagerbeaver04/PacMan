@@ -1,7 +1,5 @@
 #include "Resources.h"
 
-#include <memory>
-
 sf::Texture Resources::Textures;
 sf::Texture Resources::Labyrinth;
 
