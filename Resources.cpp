@@ -41,16 +41,18 @@ void Resources::load()
     int entity_number = 5;
     vec_sprites.resize(5);
     int rect1Left = 45;
+    int alpha = 15;
     for(int rect1 =0; rect1 < entity_number; ++rect1)
     {
         for (int rect2 = 0; rect2 < 4; ++rect2)
         {
             auto sprite = std::make_unique<sf::Sprite>(
-                    sf::Sprite(Textures, sf::IntRect(rect2*rect1Left, rect1*15, 15, 15)));
+                    sf::Sprite(Textures, sf::IntRect(alpha + rect2*rect1Left, rect1*15, 15, 15)));
             sprite->setScale(2.0f, 2.0f);
             sprite->setOrigin(7.5f, 7.5f);
             vec_sprites[rect1][dir[rect2]] = std::move(sprite);
         }
+        alpha = 0;
         rect1Left = 30;
     }
 
@@ -67,7 +69,7 @@ sf::Sprite* Resources::get(int value, Direction facing)
                 facing = Direction::Up;
             if(value == 0)
                 std::cout <<"value = " << value << ", facing=" << static_cast<int>(facing) << std::endl;
-            return vec_sprites[static_cast<int>(value / 4)].at(facing).get();//(?)
+            return vec_sprites[value / 4][facing].get();
 
     }
 
