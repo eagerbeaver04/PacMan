@@ -104,9 +104,9 @@ void PacMan::stop() {
 
 void PacMan::getSprite(int i) {
     if (directions.empty())
-        sprite = Resources::get(Resources::PacMan, Direction::Unset);
+        sprite = Resources::get(i, Direction::Unset);
     else
-        sprite = Resources::get(Resources::PacMan, directions.front());
+        sprite = Resources::get(i, directions.front());
     if (dead)
         sprite = Resources::get(Resources::DeadPacMan, Direction::Unset);
 }
